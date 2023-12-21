@@ -11,6 +11,7 @@ cd ~
 wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
 sudo chmod +x ./install 
 sudo ./install auto
+wget -O - https://www.openssl.org/source/openssl-1.1.1u.tar.gz | tar zxf -
 
 # update os & install python3
 sudo apt-get update

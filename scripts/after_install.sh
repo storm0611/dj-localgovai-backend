@@ -5,6 +5,7 @@ sudo pkill -f runserver
 
 # kill frontend servers if you are deploying any frontend
 
+cd ~/openssl-1.1.1u
 ./config --prefix=/usr/local
 make -j $(nproc)
 sudo make install_sw install_ssldirs
