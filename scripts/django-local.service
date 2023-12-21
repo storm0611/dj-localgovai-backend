@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Service]
 User=root
-WorkingDirectory=/root/crash_bandicoot/api.localgovai/scripts/
+WorkingDirectory=/root/dj-localgovai-backend/scripts/
 ExecStart=/bin/bash ./server.sh
 Type=simple
 
