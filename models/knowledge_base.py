@@ -23,20 +23,9 @@ class KnowledgeBaseModel(DynTable):
     def __init__(self):
         super().__init__(table_name="KnowledgeBase", schema=KNOWLEDGE_BASE_TABLE_SCHEMA)
 
-    def put_item(self, files=[], **kwargs):
+    def put_item(self, **kwargs):
         if kwargs.get("KnowledgeBaseID", "") == "":
             kwargs["KnowledgeBaseID"] = uuid.uuid4().hex
-        # Upload Files
-        # knowledge_base_dir = os.path.join(MEDIA_KNOWLEDGE_BASE, kwargs["KnowledgeBaseID"])
-        # if os.path.exists(knowledge_base_dir):
-        #     print("Knowledge Base folder is not empty")
-        #     shutil.rmtree(knowledge_base_dir)
-        # os.mkdir(knowledge_base_dir)
-        # for file in files:
-        #     file_path = os.path.join(knowledge_base_dir, file.name)
-        #     with open(file_path, "wb") as f:
-        #         f.write(file.read())
-        # kwargs["KnowledgeFiles"] = knowledge_base_dir 
         super().put_item(**kwargs)
         return kwargs["KnowledgeBaseID"]
 

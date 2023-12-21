@@ -30,21 +30,25 @@ class UserModel(DynTable):
     
     def search(self, who: str):
         users = User.scan(
+            comparison_op='contains',
             UserID=who
         )
         if len(users):
             return users
         users = User.scan(
+            comparison_op='contains',
             Email=who
         )
         if len(users):
             return users
         users = User.scan(
+            comparison_op='contains',
             UserName=who
         )
         if len(users):
             return users
         users = User.scan(
+            comparison_op='contains',
             FirstName=who.split(" ")[0],
             LastName=who.split(" ")[-1]
         )

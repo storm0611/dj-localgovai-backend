@@ -23,12 +23,17 @@ from .utils import (
     urlsafe_base64_decode,
     custom_token_generator
 )
+from .validators import (
+    is_valid_email
+)
 
 class LoginView(View):
     def post(self, request):
         data = json.loads(request.body.decode('utf-8')) if request.body else {}
         email = data.get('email', None)
         password = data.get('password', None)
+        if not is_valid_email(email):
+            return JsonResponse({"msg": "Incorrect Email"}, status=400)
         try:
             user = User.authenticate(
                 email=email,
@@ -72,20 +77,19 @@ class RegisterView(View):
         organization_description = data.get('organization_description', None)
         organization_type = data.get('organization_type', "Private Limited Company")
         # bussiness_description = data.get('bussiness_description', None)
-        contact_email = data.get('contact_email', None)
-        first_name = data.get('first_name', None)
-        last_name = data.get('last_name', None)
-        username = data.get('username', None)
-        email = data.get('email', None)
-        password = data.get('password', None)
-        phone_number = data.get('phone_number', None)
+        contact_email = data.get('contact_email') if data.get('contact_email', "") != "" else None
+        first_name = data.get('first_name') if data.get('first_name', "") != "" else None
+        last_name = data.get('last_name') if data.get('last_name', "") != "" else None
+        username = data.get('username') if data.get('username', "") != "" else None
+        email = data.get('email') if data.get('email', "") != "" else None
+        password = data.get('password') if data.get('password', "") != "" else None
+        phone_number = data.get('phone_number') if data.get('phone_number', "") != "" else None
+        if not is_valid_email(email):
+            return JsonResponse({"msg": "Incorrect Email"}, status=400)
         if username is None:
             username = email.split("@")[0]
         try:
             users = User.scan(condition_op='or', Email=email, UserName=username)
-            # if User.exists_item(
-            #     Email=email
-            # ):
             if len(users):
                 return JsonResponse({"msg": "User already exists"}, status=400)
             org = Org.exists_item(OrgName=organization_name)

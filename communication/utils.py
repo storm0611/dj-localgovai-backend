@@ -282,7 +282,6 @@ class CommunicationChatBotService(CommunicationService):
             sender_display_name=sender,
             chat_message_type=ChatMessageType.TEXT # equivalent to chat_message_type = 'text'
         )
-        print("Message sent to Bot: ", send_message_result.serialize())
         return send_message_result.id
     
     # Receive Message from Bot
