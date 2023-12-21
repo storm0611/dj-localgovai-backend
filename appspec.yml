@@ -2,9 +2,9 @@ version: 0.0
 os: ubuntu
 files:
   - source: /
-    destination: /root/crash_bandicoot/api.localgovai
+    destination: ~/dj-localgovai-backend/
 hooks:
   BeforeInstall:
-      - location: api.localgovai/scripts/env.sh
+      - location: scripts/before_install.sh
   AfterInstall:
-      - location: api.localgovai/scripts/server.sh
+      - location: scripts/after_install.sh
