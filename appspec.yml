@@ -1,0 +1,10 @@
+version: 0.0
+os: ubuntu
+files:
+  - source: /
+    destination: /root/crash_bandicoot/api.localgovai
+hooks:
+  BeforeInstall:
+      - location: api.localgovai/scripts/env.sh
+  AfterInstall:
+      - location: api.localgovai/scripts/server.sh

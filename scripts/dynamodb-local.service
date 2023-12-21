@@ -1,0 +1,12 @@
+[Unit]
+Description=DynamoDB Local Server
+After=multi-user.target
+
+[Service]
+User=root
+WorkingDirectory=/root/crash_bandicoot/api.localgovai/dynamodb_local/
+ExecStart=java -Djava.library.path=./DynamoDBLocal_lib -jar ./DynamoDBLocal.jar -port 8888 -sharedDb
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
