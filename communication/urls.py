@@ -15,12 +15,14 @@ from .views import (
     RecodingStateCallBacksView,
     ChannelView,
     ChatMessageView,
+    FeedbackView
 )
 
 urlpatterns = [
     path('msg/speech-to-text', SpeechToTextView.as_view(), name='speech_to_text'),
     path('msg/text-to-speech', TextToSpeechView.as_view(), name='text_to_speech'),
     path('msg/send-message-bot', SendMessageBotView.as_view(), name='send_message_bot'),
+    path('msg/feedback', FeedbackView.as_view(), name='feedback'),
     # re_path(r'^phone/available-phone/(?P<phone_number>\+\d+)$', PhoneNumberView.as_view(), name='available_phone'),
     path('phone/available-phone', PhoneNumberView.as_view(), name='available_phone'),
     path('call/make-outbound-call', CallAutomationView.as_view(), name='make_outbound_call'),

@@ -33,7 +33,8 @@ from models.authentication import (
 )
 from models.communication import (
     ChatMessage,
-    Channel
+    Channel,
+    Feedback
 )
 
 # Create your views here.
@@ -403,5 +404,33 @@ class ChatMessageView(View):
                 ChannelID=channel_id
             )
             return JsonResponse({"msg": f"{len(messages)} Messages are found", "messages": messages}, status=200)    
+        except Exception as err:
+            return JsonResponse({"msg": str(err)}, status=500)
+
+class FeedbackView(View):
+    def post(self, request):
+        try:
+            data = data = json.loads(request.body.decode('utf-8')) if request.body else {} 
+            user_id = data.get("user_id") if data.get("user_id", "") != "" else None
+            feedback_type = data.get("feedback_type") if data.get("feedback_type", "") != "" else None
+            support_type = data.get("support_type") if data.get("support_type", "") != "" else None
+            user_type = data.get("user_type") if data.get("user_type", "guest") != "" else None
+            comments = data.get("comments") if data.get("comments", "") != "" else None
+            contact_to_user = bool(data.get("contact_to_user")) if data.get("contact_to_user", "") != "" else False
+            rating = int(data.get("rating", 0))
+            knowledge_base_id = data.get("knowledge_base_id") if data.get("knowledge_base_id", "") != "" else None
+            service_id = data.get("service_id") if data.get("service_id", "") != "" else None
+            feedback_id = Feedback.put_item(
+                UserID=user_id,
+                FeedbackType=feedback_type,
+                SupportType=support_type,
+                UserType=user_type,
+                Comments=comments,
+                ContactToUser=contact_to_user,
+                Rating=rating,
+                ServiceID=service_id,
+                KnowledgeBaseID=knowledge_base_id
+            )
+            return JsonResponse({"msg": f"{feedback_id} Feedback are submitted", "feedback_id": feedback_id}, status=200)    
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)

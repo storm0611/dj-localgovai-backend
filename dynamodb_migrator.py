@@ -6,7 +6,8 @@ from models.authentication import (
 from models.communication import (
     Channel,
     ChatMessage,
-    LanguageSupport
+    LanguageSupport,
+    Feedback
 )
 from models.knowledge_base import (
     KnowledgeBase,
@@ -62,6 +63,20 @@ def init_orgs_table():
         else:
             s3_logger.info(f"Table {Org.table.name} already exists.")
             print(f"Table {Org.table.name} already exists.")
+    except:
+        raise
+
+# Migrate Feedbacks Table
+def init_feedbacks_table():
+    try:
+        exists = Feedback.exists_table()
+        if not exists:
+            Feedback.create_table()
+            s3_logger.info(f"Table {Feedback.table.name} created successfully.")
+            print(f"Table {Feedback.table.name} created successfully.")
+        else:
+            s3_logger.info(f"Table {Feedback.table.name} already exists.")
+            print(f"Table {Feedback.table.name} already exists.")
     except:
         raise
 
@@ -293,6 +308,7 @@ def initialize_all_tables():
         init_channels_table,
         init_messages_table,
         init_language_support_table,
+        init_feedbacks_table,
 
         # # knowledge base app
         init_knowledge_bases_table,

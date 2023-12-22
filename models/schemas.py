@@ -700,17 +700,15 @@ ERROR_LOGS_TABLE_SCHEMA = {
     },
 }
 
-FEEDBACK_AND_RATINGS_TABLE_SCHEMA = {
-    'TableName': 'FeedbackAndRatings',
+FEEDBACKS_TABLE_SCHEMA = {
+    'TableName': 'Feedbacks',
     'KeySchema': [
-        {'AttributeName': 'FeedbackID', 'KeyType': 'HASH'},  # Partition key
+        {'AttributeName': 'UserID', 'KeyType': 'HASH'},  # Partition key
+        {'AttributeName': 'FeedbackID', 'KeyType': 'RANGE'},  # Sort key
     ],
     'AttributeDefinitions': [
-        {'AttributeName': 'FeedbackID', 'AttributeType': 'S'},
         {'AttributeName': 'UserID', 'AttributeType': 'S'},
-        {'AttributeName': 'ServiceID', 'AttributeType': 'S'},
-        {'AttributeName': 'Rating', 'AttributeType': 'N'},
-        {'AttributeName': 'Comments', 'AttributeType': 'S'},
+        {'AttributeName': 'FeedbackID', 'AttributeType': 'S'},
     ],
     'ProvisionedThroughput': {
         'ReadCapacityUnits': 5,

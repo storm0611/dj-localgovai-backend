@@ -10,7 +10,8 @@ from utils.aws_s3 import (
 from .schemas import (
     CHANNELS_TABLE_SCHEMA,
     MESSAGES_TABLE_SCHEMA,
-    LANGUAGE_SUPPORT_TABLE_SCHEMA
+    LANGUAGE_SUPPORT_TABLE_SCHEMA,
+    FEEDBACKS_TABLE_SCHEMA
 )
 
 # Channels Table
@@ -76,6 +77,17 @@ class LanguageSupportModel(DynTable):
         super().put_item(**kwargs)
         return kwargs["LanguageID"]
 
+class FeedbackModel(DynTable):
+    def __init__(self):
+        super().__init__(table_name="Feedbacks", schema=FEEDBACKS_TABLE_SCHEMA)
+    
+    def put_item(self, **kwargs):
+        if kwargs.get("FeedbackID", "") == "":
+            kwargs["FeedbackID"] = uuid.uuid4().hex
+        super().put_item(**kwargs)
+        return kwargs["FeedbackID"]
+
 Channel = ChannelModel()
 ChatMessage = ChatMessageModel()
 LanguageSupport = LanguageSupportModel()
+Feedback = FeedbackModel()
