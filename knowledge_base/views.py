@@ -63,7 +63,7 @@ class KnowledgeBaseView(View):
         knowledge_base_parent  = data.get("knowledge_base_parent") if data.get("knowledge_base_parent", "") != "" else None
         knowledge_base_name  = data.get("knowledge_base_name") if data.get("knowledge_base_name", "") != "" else None
         knowledge_base_searchable  = bool(data.get("knowledge_base_searchable", True))
-        knowledge_base_url  = data.get("knowledge_base_url") if data.get("knowledge_base_url", "") != "" else None
+        knowledge_base_url  = json.loads(data.get("knowledge_base_url")) if data.get("knowledge_base_url", "") != "" else []
         knowledge_base_phone  = data.get("knowledge_base_phone") if data.get("knowledge_base_phone", "") != "" else None
         project_desc  = data.get("proj_description") if data.get("proj_description", "") != "" else None
         publish_date  = data.get("publish_date") if data.get("publish_date", "") != "" else None

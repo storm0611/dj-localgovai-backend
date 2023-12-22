@@ -183,7 +183,7 @@ COMMUNICATION_ENDPOINT_URL = os.environ.get('COMMUNICATION_ENDPOINT_URL', None)
 COMMUNICATION_IDENTITY = os.environ.get('COMMUNICATION_IDENTITY', None)
 COMMUNICATION_ACCESS_TOKEN = os.environ.get('COMMUNICATION_ACCESS_TOKEN', None)
 CONNECTION_STRING = os.environ.get('CONNECTION_STRING', None)
-CALLBACK_URI_HOST = os.environ.get("CALLBACK_URI_HOST", "https://localhost:8000/v1/comm/call")
+CALLBACK_URI_HOST = os.environ.get("CALLBACK_URI_HOST", "https://df59-193-37-70-72.ngrok-free.app/v1/comm/call")
 AZURE_NUMBER = os.environ.get('AZURE_NUMBER', None)
 NUMBERS_TO_DIAL = os.getenv("NUMBERS_TO_DIAL", None)
 

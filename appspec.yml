@@ -2,7 +2,7 @@ version: 0.0
 os: ubuntu
 files:
   - source: /
-    destination: ~/dj-localgovai-backend/
+    destination: /root/dj-localgovai-backend/
 hooks:
   BeforeInstall:
       - location: scripts/before_install.sh

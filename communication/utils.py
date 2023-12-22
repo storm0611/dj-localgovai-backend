@@ -9,6 +9,7 @@ import tempfile
 from utils.aws_s3 import s3_logger
 from pydub import AudioSegment
 from twilio.rest import Client
+from backend.settings import TMP_DIR
 from twilio.base.exceptions import (
     TwilioRestException,
     TwilioException
@@ -669,8 +670,16 @@ class CommunicationCallAutomationService(CommunicationPhoneNumberService):
             except:
                 print("Playing invalid prompt from local")
                 self.play_media(call_connection_id=call_connection_id, file_url=self.invalid_prompt_uri)
-            
     
+    # Download recording file        
+    def download_recording(self, content_location):
+        recording_data = self.call_automation_client.download_recording(content_location)
+        file_path = os.path.join(TMP_DIR, f"recording_{str(int(datetime.now().timestamp()))}.wav")
+        print("download recording file to ", file_path)
+        with open(file_path, "wb") as binary_file:
+            binary_file.write(recording_data.read())
+        return file_path
+
     # Stop recording
     def hangup(self, recording_id=None, hangout_call_connection_id=None):
         if recording_id:

@@ -213,6 +213,7 @@ class CallAutomationHangUpView(View):
 class CallAutomationCallBacksView(View):
     def post(self, request):
         data = json.loads(request.body.decode('utf-8')) if request.body else {}
+        print(data)
         if not isinstance(data, list):
             event = EventGridEvent.from_dict(data)
             print("EventGridEvent", event)
@@ -226,6 +227,9 @@ class CallAutomationCallBacksView(View):
                 # communication_call_automation_service.reject_call(incoming_call_context=incoming_call_context)
                 print(f"Answer the call: correlationId: {correlation_id}")
                 communication_call_automation_service.answer_call(incoming_call_context=incoming_call_context)
+            elif event_type == "Microsoft.Communication.RecordingFileStatusUpdated":
+                print("download recording")
+                # file_path = communication_call_automation_service.download_recording(content_location="Hello")
         else:
             for event_dict in json.loads(request.body.decode('utf-8')):
                 # Parsing callback events
@@ -233,7 +237,6 @@ class CallAutomationCallBacksView(View):
                 print("CloudEvent", event)
                 event_type = event.type
                 print(f"{event_type} event received")
-
                 if event_type == "Microsoft.Communication.CallConnected":
                     call_connection_id = event.data['callConnectionId']
                     print(f"Call is connected: callConnectionId: {call_connection_id}")
@@ -295,7 +298,7 @@ class RecodingStateCallBacksView(View):
     def post(self, request):
         data = json.loads(request.body.decode('utf-8')) if request.body else {}
         print("Recording State Data: ", data)
-        return JsonResponse({})
+        return JsonResponse({"msg": "Success"}, status=200)        
     
 class ChannelView(View):
     @method_decorator(jwt_token_required)
