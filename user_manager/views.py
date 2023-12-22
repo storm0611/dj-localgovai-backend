@@ -16,13 +16,13 @@ from models.authentication import (
 from models.user_manager import (
     Role,
     Team,
-    TeamMember
+    TeamMember,
+    UserPermission
 )
 from .decorators import (
     access_team_allowance,
     access_teammember_allowance
 )
-# Create your views here.
         
 class RoleView(View):
     @method_decorator(jwt_token_required)
@@ -345,5 +345,42 @@ class TeamMemberEditView(View):
             return JsonResponse({"msg": "User Info Not Matched"}, status=400)
         except IndexError:
             return JsonResponse({"msg": "User Not Found, incorrect Email address"}, status=400)
+        except Exception as err:
+            return JsonResponse({"msg": str(err)}, status=500)
+
+class UserPermissionView(View):
+    @method_decorator(jwt_token_required)
+    def get(self, request):
+        try:
+            user_id = request.user_info.get("user_id", None)
+            data = request.GET
+            user_type = data.get("user_type") if data.get("user_type", "") != "" else None
+            if not user_type:
+                user_permissions = UserPermission.query(UserID=user_id)
+            else:
+                user_permission = UserPermission.get()
+            return JsonResponse({"data": user_permission}, status=200)
+        except IndexError:
+            return JsonResponse({"msg": "Role Not Found"}, status=400)
+        except Exception as err:
+            return JsonResponse({"msg": str(err)}, status=500)
+        
+    @method_decorator(jwt_token_required)
+    def post(self, request):
+        try:
+            user_id = request.user_info.get("user_id", None)
+            data = json.loads(request.body.decode('utf-8')) if request.body else {}
+            role_name = data.get("role_name") if data.get("role_name", "") != "" else None
+            role_desc = data.get("role_desc") if data.get("role_desc", "") != "" else None
+            if not role_name:
+                return JsonResponse({"msg": "Role Name Required"}, status=400)
+            role = Role.exists_item(RoleName=role_name)
+            if role:
+                return JsonResponse({"msg": "Role Already Exists"}, status=400)
+            role_id = Role.put_item(
+                RoleName=role_name,
+                RoleDescription=role_desc
+            )
+            return JsonResponse({"msg": "Role Successfully created", "role_id": role_id}, status=201)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)

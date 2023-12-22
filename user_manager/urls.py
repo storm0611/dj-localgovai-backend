@@ -4,7 +4,8 @@ from .views import (
     TeamView,
     TeamMemberView,
     TeamEditView,
-    TeamMemberEditView
+    TeamMemberEditView,
+    UserPermissionView
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path('team/edit', TeamEditView.as_view(), name='team_edit'),
     path('teammember', TeamMemberView.as_view(), name='teammember'),
     path('teammember/edit', TeamMemberEditView.as_view(), name='teammember_edit'),
+    # path('user-permission', UserPermissionView.as_view(), name='user_permission'),
 ]

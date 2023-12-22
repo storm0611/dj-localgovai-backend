@@ -16,6 +16,7 @@ from models.user_manager import (
     Role,
     Team,
     TeamMember,
+    UserPermission,
 )
 from models.file_manager import (
     ResourceFile,
@@ -33,6 +34,20 @@ def init_users_table():
         else:
             s3_logger.info(f"Table {User.table.name} already exists.")
             print(f"Table {User.table.name} already exists.")
+    except:
+        raise
+
+# Migrate UserPermissions Table
+def init_user_permissions_table():
+    try:
+        exists = UserPermission.exists_table()
+        if not exists:
+            UserPermission.create_table()
+            s3_logger.info(f"Table {UserPermission.table.name} created successfully.")
+            print(f"Table {UserPermission.table.name} created successfully.")
+        else:
+            s3_logger.info(f"Table {UserPermission.table.name} already exists.")
+            print(f"Table {UserPermission.table.name} already exists.")
     except:
         raise
 
@@ -288,6 +303,7 @@ def initialize_all_tables():
         init_roles_table,
         init_teams_table,
         init_team_members_table,
+        init_user_permissions_table,
 
         # file manager app
         init_resource_folders_table,

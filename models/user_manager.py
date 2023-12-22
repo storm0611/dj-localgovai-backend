@@ -11,6 +11,7 @@ from .schemas import (
     ROLES_TABLE_SCHEMA,
     TEAMS_TABLE_SCHEMA,
     TEAM_MEMBERS_TABLE_SCHEMA,
+    USER_PERMISSIONS_TABLE_SCHEMA,
 )
 
 # Roles Table
@@ -48,6 +49,18 @@ class TeamMemberModel(DynTable):
         super().put_item(**kwargs)
         return kwargs["TeamMemberID"]
     
+# UserPermissions Table
+class UserPermissionModel(DynTable):
+    def __init__(self):
+        super().__init__(table_name="UserPermissions", schema=USER_PERMISSIONS_TABLE_SCHEMA)
+    
+    def put_item(self, **kwargs):
+        if kwargs.get("UserPermissionID", "") == "":
+            kwargs["UserPermissionID"] = uuid.uuid4().hex
+        super().put_item(**kwargs)
+        return kwargs["UserPermissionID"]
+
 Role = RoleModel()
 Team = TeamModel()
 TeamMember = TeamMemberModel()
+UserPermission = UserPermissionModel()

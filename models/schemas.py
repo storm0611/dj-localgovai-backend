@@ -74,10 +74,6 @@ USER_PERMISSIONS_TABLE_SCHEMA = {
     'AttributeDefinitions': [
         {'AttributeName': 'UserID', 'AttributeType': 'S'},
         {'AttributeName': 'UserType', 'AttributeType': 'S'},
-        {'AttributeName': 'Permissions', 'AttributeType': 'S'},
-        {'AttributeName': 'CanInteractWithGlobal', 'AttributeType': 'BOOL'},
-        {'AttributeName': 'CanInteractWithInstance', 'AttributeType': 'BOOL'},
-        {'AttributeName': 'MessageColor', 'AttributeType': 'S'},
     ],
     'ProvisionedThroughput': {
         'ReadCapacityUnits': 5,

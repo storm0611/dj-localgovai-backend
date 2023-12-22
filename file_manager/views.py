@@ -254,7 +254,56 @@ class FileView(View):
             return JsonResponse({"msg": "File not found."}, status=400)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
-        
+
+    @method_decorator([jwt_token_required, access_file_allowance])
+    def put(self, request):
+        try:
+            file = request.file
+            file_id = file["FileID"]
+            file_path = file["FilePath"]
+            file_name = file["FileName"]
+            file_size = file["FileSize"]
+            s3_obj = S3Object(s3_object_key=file_path)
+            if not s3_obj.exists():
+                return JsonResponse({"msg": "File does not exists in storage"}, status=400)
+            user_id = request.user_info.get("user_id")
+            data = json.loads(request.body.decode('utf-8')) if request.body else {} 
+            type = data.get("type") if data.get("type", "") != "" else None
+            dst_folder_id = data.get("dst_folder_id") if data.get("dst_folder_id", "") != "" else None
+            if type == "cp" or type == "mv":
+                if not dst_folder_id:
+                    return JsonResponse({"msg": "Destination Folder ID Required"}, status=400)
+                dst_folder = ResourceFolder.exists_item(FolderID=dst_folder_id)
+                if not dst_folder:
+                    return JsonResponse({"msg": "Destination Folder Not Found"}, status=400)
+                dst_file_path = f"files/{user_id}/{dst_folder_id}/{file_name}"
+                dst_file = ResourceFile.exists_item(
+                    FilePath = dst_file_path,
+                )
+                if dst_file:
+                    return JsonResponse({"msg": "Duplicated Destination File"}, status=400)
+                dst_s3_obj = S3Object(s3_object_key=dst_file_path)
+                dst_s3_obj.put(s3_obj.get())
+                dst_file_id = ResourceFile.put_item(
+                    FileName=file_name,
+                    FilePath=dst_file_path,
+                    UserID=user_id,
+                    KnowledgeBaseID=dst_folder["KnowledgeBaseID"],
+                    FileSize=file_size,
+                    FolderID=dst_folder_id
+                )
+                if type == "mv":
+                    s3_obj.delete()
+                    ResourceFile.delete_item(FileID=file_id)
+                    return JsonResponse({"msg": "File moved", "dst_file_id": dst_file_id}, status=200)
+                return JsonResponse({"msg": "File copied", "dst_file_id": dst_file_id}, status=200)
+            else:
+                return JsonResponse({"msg": "Invalid Type"}, status=400)
+        except IndexError:
+            return JsonResponse({"msg": "ResourceFolder not found."}, status=400)
+        except Exception as err:
+            return JsonResponse({"msg": str(err)}, status=500)
+
     @method_decorator([jwt_token_required, access_file_allowance])
     def delete(self, request):
         try:
@@ -268,7 +317,7 @@ class FileView(View):
             ResourceFile.delete_item(FileID=file_id)
             return JsonResponse({"msg": "File Successfully deleted", "file_id": file_id}, status=200)
         except IndexError:
-            return JsonResponse({"msg": "ResourceFolder not found."}, status=400)
+            return JsonResponse({"msg": "File not found."}, status=400)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
         
@@ -293,9 +342,9 @@ class FileDownloadView(View):
             file = ResourceFile.exists_item(FileID=file_id)
             if not file:
                 raise IndexError
-            temp_dir = TMP_DIR
             file_name = file["FileName"]
             file_path = file["FilePath"]
+            temp_dir = TMP_DIR
             s3_obj = S3Object(s3_object_key=file_path)
             temp_path = os.path.join(temp_dir, file_name)
             with open(temp_path, "wb") as fp:
