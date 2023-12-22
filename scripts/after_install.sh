@@ -23,4 +23,5 @@ install req.txt
 pip install -r /root/dj-localgovai-backend/req.txt
 
 # run server
+cp /root/.env /root/dj-localgovai-backend/
 screen -d -m python manage.py runserver 0.0.0.0:8000
