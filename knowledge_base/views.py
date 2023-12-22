@@ -240,7 +240,7 @@ class KnowledgeBaseQuestionView(View):
                 KnowledgeBaseID=knowledge_base_id,
                 KnowledgeBaseQuestionID=question_id
             )
-            return JsonResponse({"msg": "Successfully Created", "knowledge_base_question_id": question_id}, status=200)
+            return JsonResponse({"msg": "Successfully Deleted Successfully", "knowledge_base_question_id": question_id}, status=200)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
 
