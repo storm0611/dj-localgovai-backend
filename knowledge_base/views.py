@@ -236,11 +236,18 @@ class KnowledgeBaseQuestionView(View):
         if not knowledge_base_id or not question_id:
             return JsonResponse({"msg": "Knowledge Base ID and Question ID required"}, status=400)
         try:
+            if not KnowledgeBaseQuestion.get_item(
+                KnowledgeBaseID=knowledge_base_id,
+                KnowledgeBaseQuestionID=question_id
+            ):
+                raise IndexError
             KnowledgeBaseQuestion.delete_item(
                 KnowledgeBaseID=knowledge_base_id,
                 KnowledgeBaseQuestionID=question_id
             )
             return JsonResponse({"msg": "Successfully Deleted Successfully", "knowledge_base_question_id": question_id}, status=200)
+        except IndexError:
+            return JsonResponse({"msg": "Question not found"}, status=400)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
 
