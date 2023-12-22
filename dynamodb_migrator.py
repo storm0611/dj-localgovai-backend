@@ -18,6 +18,7 @@ from models.user_manager import (
     Team,
     TeamMember,
     UserPermission,
+    AccountSetting
 )
 from models.file_manager import (
     ResourceFile,
@@ -49,6 +50,20 @@ def init_user_permissions_table():
         else:
             s3_logger.info(f"Table {UserPermission.table.name} already exists.")
             print(f"Table {UserPermission.table.name} already exists.")
+    except:
+        raise
+
+# Migrate AccountSettings Table
+def init_account_settings_table():
+    try:
+        exists = AccountSetting.exists_table()
+        if not exists:
+            AccountSetting.create_table()
+            s3_logger.info(f"Table {AccountSetting.table.name} created successfully.")
+            print(f"Table {AccountSetting.table.name} created successfully.")
+        else:
+            s3_logger.info(f"Table {AccountSetting.table.name} already exists.")
+            print(f"Table {AccountSetting.table.name} already exists.")
     except:
         raise
 
@@ -320,6 +335,7 @@ def initialize_all_tables():
         init_teams_table,
         init_team_members_table,
         init_user_permissions_table,
+        init_account_settings_table,
 
         # file manager app
         init_resource_folders_table,
@@ -458,4 +474,60 @@ def initialize_all_tables():
             raise
 
 if __name__ == "__main__":
-    initialize_all_tables()
+    # initialize_all_tables()
+    try:
+        User.delete_table()
+    except:
+        pass
+    try:
+        Org.delete_table()
+    except:
+        pass
+    try:
+        Channel.delete_table()
+    except:
+        pass
+    try:
+        ChatMessage.delete_table()
+    except:
+        pass
+    try:
+        LanguageSupport.delete_table()
+    except:
+        pass
+    try:
+        Feedback.delete_table()
+    except:
+        pass
+    try:
+        KnowledgeBase.delete_table()
+    except:
+        pass
+    try:
+        KnowledgeBaseQuestion.delete_table()
+    except:
+        pass
+    try:
+        Team.delete_table()
+    except:
+        pass
+    try:
+        TeamMember.delete_table()
+    except:
+        pass
+    try:
+        UserPermission.delete_table()
+    except:
+        pass
+    try:
+        AccountSetting.delete_table()
+    except:
+        pass
+    try:
+        ResourceFile.delete_table()
+    except:
+        pass
+    try:
+        ResourceFolder.delete_table()
+    except:
+        pass

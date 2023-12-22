@@ -45,6 +45,20 @@ USERS_TABLE_SCHEMA = {
     },
 }
 
+ACCOUNT_SETTING_SCHEMA = {
+    'TableName': 'AccountSettings',
+    'KeySchema': [
+        {'AttributeName': 'UserID', 'KeyType': 'HASH'},  # Partition key
+    ],
+    'AttributeDefinitions': [
+        {'AttributeName': 'UserID', 'AttributeType': 'S'},
+    ],
+    'ProvisionedThroughput': {
+        'ReadCapacityUnits': 5,
+        'WriteCapacityUnits': 5
+    },
+}
+
 BILLING_DETAILS_TABLE_SCHEMA = {
     'TableName': 'BillingDetails',
     'KeySchema': [

@@ -384,3 +384,7 @@ class UserPermissionView(View):
             return JsonResponse({"msg": "Role Successfully created", "role_id": role_id}, status=201)
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
+
+class AccountSettingView(View):
+    def get(self, request):
+        return JsonResponse({"msg": "ok"})

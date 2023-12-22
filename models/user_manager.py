@@ -12,6 +12,7 @@ from .schemas import (
     TEAMS_TABLE_SCHEMA,
     TEAM_MEMBERS_TABLE_SCHEMA,
     USER_PERMISSIONS_TABLE_SCHEMA,
+    ACCOUNT_SETTING_SCHEMA
 )
 
 # Roles Table
@@ -60,7 +61,13 @@ class UserPermissionModel(DynTable):
         super().put_item(**kwargs)
         return kwargs["UserPermissionID"]
 
+# AccountSettings Table
+class AccountSettingModel(DynTable):
+    def __init__(self):
+        super().__init__(table_name="AccountSettings", schema=ACCOUNT_SETTING_SCHEMA)
+
 Role = RoleModel()
 Team = TeamModel()
 TeamMember = TeamMemberModel()
 UserPermission = UserPermissionModel()
+AccountSetting = AccountSettingModel()
