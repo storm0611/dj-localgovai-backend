@@ -228,6 +228,22 @@ class KnowledgeBaseQuestionView(View):
         except Exception as err:
             return JsonResponse({"msg": str(err)}, status=500)
 
+    @method_decorator(jwt_token_required)
+    def delete(self, request):
+        data = json.loads(request.body.decode('utf-8')) if request.body else {}
+        knowledge_base_id = data.get("knowledge_base_id") if data.get("knowledge_base_id", "") != "" else None
+        question_id = data.get("question_id") if data.get("question_id", "") != "" else None
+        if not knowledge_base_id or not question_id:
+            return JsonResponse({"msg": "Knowledge Base ID and Question ID required"}, status=400)
+        try:
+            KnowledgeBaseQuestion.delete_item(
+                KnowledgeBaseID=knowledge_base_id,
+                KnowledgeBaseQuestionID=question_id
+            )
+            return JsonResponse({"msg": "Successfully Created", "knowledge_base_question_id": question_id}, status=200)
+        except Exception as err:
+            return JsonResponse({"msg": str(err)}, status=500)
+
 class SettingView(View):
     @method_decorator(jwt_token_required)
     def post(self, request):

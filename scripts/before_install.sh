@@ -15,7 +15,7 @@ wget -O - https://www.openssl.org/source/openssl-1.1.1u.tar.gz | tar zxf -
 
 # update os & install python3
 sudo apt-get update
-sudo apt-get install -y python3 python3-dev python3-pip python3-venv python-is-python3
+sudo apt-get install -y python3 python3-dev python3-pip python3-venv python-is-python3 ffmpeg
 # pip install --user --upgrade virtualenv
 
 # delete app
